@@ -9,7 +9,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
+import de.orome.todoliste.adapter.listview.ToDoOverviewListAdapter;
+import de.orome.todoliste.model.ToDo;
 
 public class Activity_TodoUebersicht extends AppCompatActivity {
 
@@ -23,17 +27,17 @@ public class Activity_TodoUebersicht extends AppCompatActivity {
         listToDo=findViewById(R.id.list_ToDo);
 
         // Datenquelle als String zum Befüllen der ListView anlegen
-        List<String> datasource = new ArrayList<>();
-        datasource.add("Test 1");
-        datasource.add("Test 2");
+        List<ToDo> datasource = new ArrayList<>();
+        datasource.add(new ToDo("Einkaufen"));
+        datasource.add(new ToDo("Kerstin besuchen", Calendar.getInstance()));
         // Adapter für Listview erzeugen und Werte übergeben
-        listToDo.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,datasource));
+        listToDo.setAdapter(new ToDoOverviewListAdapter(this,datasource));
 
         listToDo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Object element = adapterView.getAdapter().getItem(position);
-                Log.e("Clicked on: ", element.toString());
+                //Log.e("Clicked on: ", element.toString());
             }
         });
     }
