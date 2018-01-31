@@ -37,7 +37,7 @@ public class Activity_TodoUebersicht extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Object element = adapterView.getAdapter().getItem(position);
-                //Log.e("Clicked on: ", element.toString());
+                Log.e("Clicked on: ", element.toString());
             }
         });
     }
