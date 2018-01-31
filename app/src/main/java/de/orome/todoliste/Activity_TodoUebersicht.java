@@ -23,6 +23,7 @@ public class Activity_TodoUebersicht extends AppCompatActivity {
         listToDo=findViewById(R.id.list_ToDo);
 
         // Datenquelle als String zum Befüllen der ListView anlegen
+        // eindimensionale Liste
         List<String> datasource = new ArrayList<>();
         datasource.add("Test 1");
         datasource.add("Test 2");
@@ -33,7 +34,7 @@ public class Activity_TodoUebersicht extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Object element = adapterView.getAdapter().getItem(position);
-                Log.e("Clicked on: ", element.toString());
+                Log.e("Clicked on", element.toString());
             }
         });
     }
