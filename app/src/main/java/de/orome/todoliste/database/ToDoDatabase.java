@@ -18,7 +18,10 @@ import de.orome.todoliste.model.ToDo;
  */
 
 public class ToDoDatabase extends SQLiteOpenHelper {
-    private static final String DB_NAME = "ToDo.db";
+    public static ToDoDatabase INSTANCE = null;
+
+
+    private static final String DB_NAME = "ToDo";
     private static final int DB_VERSION = 1;
     // Konstanten für Tabelle ToDo ...
     private static final String TABLE_NAME_TODO = "todos";
@@ -27,15 +30,22 @@ public class ToDoDatabase extends SQLiteOpenHelper {
     private static final String TBL_TODO_COLUMN_DUEDATE = "todo_duedate";
     private static final String CREATE_TABLE_TODO = "CREATE TABLE " + TABLE_NAME_TODO
             + " ("
-            + TBL_TODO_COLUMN_ID + " INTEGER AUTOINCREMENT PRIMARY KEY, "
+            + TBL_TODO_COLUMN_ID + " INTEGER PRIMARY KEY, "
             + TBL_TODO_COLUMN_NAME + " TEXT NOT NULL, "
             + TBL_TODO_COLUMN_DUEDATE + " INTEGER DEFAULT NULL"
             + ")";
     private static final String DROP_TABLE_TODO = "DROP TABLE IF EXISTS " + TABLE_NAME_TODO;
     // -------------- Ende Konstanten Table ToDo
 
-    public ToDoDatabase(Context context) {
+    private ToDoDatabase(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+    }
+
+    public static ToDoDatabase getInstance(final Context context){
+        if(INSTANCE == null){
+            INSTANCE = new ToDoDatabase(context);
+        }
+        return INSTANCE;
     }
 
     @Override
@@ -84,7 +94,7 @@ public class ToDoDatabase extends SQLiteOpenHelper {
         // Cursor auswerten, wenn weder null noch keine Werte erhalten
         if(cursor!=null && cursor.getCount()>0){
             cursor.moveToFirst();
-            ToDo todo = new ToDo(cursor.getString(cursor.getColumnIndex(TBL_TODO_COLUMN_NAME)));
+            todo = new ToDo(cursor.getString(cursor.getColumnIndex(TBL_TODO_COLUMN_NAME)));
             todo.setId(cursor.getLong(cursor.getColumnIndex(TBL_TODO_COLUMN_ID)));
 
             Calendar calendar = null;
