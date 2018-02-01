@@ -7,6 +7,8 @@ import java.util.Calendar;
  */
 
 public class ToDo {
+
+    private long id;
     private String   nme_Todo;
     private Calendar dueDate;
 
@@ -35,5 +37,13 @@ public class ToDo {
 
     public void setDueDate(Calendar dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }
