@@ -21,13 +21,13 @@ public class ToDoDatabase extends SQLiteOpenHelper {
     public static ToDoDatabase INSTANCE = null;
 
 
-    private static final String DB_NAME = "ToDo";
+    private static final String DB_NAME = "ToDo.db";
     private static final int DB_VERSION = 1;
     // Konstanten für Tabelle ToDo ...
     private static final String TABLE_NAME_TODO = "todos";
-    private static final String TBL_TODO_COLUMN_ID = "todo_id";
-    private static final String TBL_TODO_COLUMN_NAME = "todo_name";
-    private static final String TBL_TODO_COLUMN_DUEDATE = "todo_duedate";
+    public static final String TBL_TODO_COLUMN_ID = "todo_id";
+    public static final String TBL_TODO_COLUMN_NAME = "todo_name";
+    public static final String TBL_TODO_COLUMN_DUEDATE = "todo_duedate";
     private static final String CREATE_TABLE_TODO = "CREATE TABLE " + TABLE_NAME_TODO
             + " ("
             + TBL_TODO_COLUMN_ID + " INTEGER PRIMARY KEY, "
@@ -74,7 +74,8 @@ public class ToDoDatabase extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(TBL_TODO_COLUMN_NAME,toDo.getNme_Todo());
         // mit inline If prüfen, ob DueDate null ist ...
-        values.put(TBL_TODO_COLUMN_DUEDATE,toDo.getDueDate()==null ? null:toDo.getDueDate().getTimeInMillis()/1000);
+        //values.put(TBL_TODO_COLUMN_DUEDATE,toDo.getDueDate() == null ? null: toDo.getDueDate().getTimeInMillis()/1000);
+        values.put(TBL_TODO_COLUMN_DUEDATE, toDo.getDueDate() == null ? null : toDo.getDueDate().getTimeInMillis()/1000);
         // 'ID nach dem insert ermitteln
         long newID = database.insert(TABLE_NAME_TODO,null,values);
         // DAtenbank schließen
@@ -150,6 +151,20 @@ public class ToDoDatabase extends SQLiteOpenHelper {
 
         database.close();
 
+    }
+
+    public Cursor getAllToDosAsCursor(){
+        String strSQL = "SELECT " + TBL_TODO_COLUMN_ID +" as _id, "+ TBL_TODO_COLUMN_NAME +", "+ TBL_TODO_COLUMN_DUEDATE
+                + " FROM " + TABLE_NAME_TODO;
+        return this.getReadableDatabase().rawQuery(strSQL,null);
+    }
+
+    public ToDo getFirstToDo(){
+        List<ToDo> todos = this.readAllToDo();
+        if(todos.size() > 0){
+            return todos.get(0);
+        }
+        return null;
     }
 
 }

@@ -22,7 +22,7 @@ import de.orome.todoliste.model.ToDo;
 public class Activity_TodoUebersicht extends AppCompatActivity {
 
     private ListView listToDo;
-    private List<ToDo> datasource;
+    //private List<ToDo> datasource;
     private ToDoOverviewListAdapter adapter;
 
     @Override
@@ -37,14 +37,8 @@ public class Activity_TodoUebersicht extends AppCompatActivity {
         Button btnDeleteFirst = (Button)findViewById(R.id.btn_delete_first);
         Button btnUpdateFirst = (Button)findViewById(R.id.btn_update_first);
 
-
-        // Datenquelle als String zum Befüllen der ListView anlegen
-        this.datasource = ToDoDatabase.getInstance(this).readAllToDo();
-        //datasource.add(new ToDo("Einkaufen"));
-        //datasource.add(new ToDo("Kerstin besuchen", Calendar.getInstance()));
-
         // Adapter für Listview erzeugen und Werte übergeben
-        this.adapter = new ToDoOverviewListAdapter(this,datasource);
+        this.adapter = new ToDoOverviewListAdapter(this,ToDoDatabase.getInstance(this).getAllToDosAsCursor());
         this.listToDo.setAdapter(adapter);
 
         this.listToDo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -55,6 +49,8 @@ public class Activity_TodoUebersicht extends AppCompatActivity {
             }
         });
 
+
+
         // OnClicklistener für die Buttons definieren
         if (btnCreate !=null){
             btnCreate.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +59,8 @@ public class Activity_TodoUebersicht extends AppCompatActivity {
                     // zwei vorgefertigte ToDos einfügen
                     ToDoDatabase database = ToDoDatabase.getInstance(Activity_TodoUebersicht.this);
                     database.createToDo(new ToDo("Einkaufen"));
-                    database.createToDo(new ToDo("Schrottplatz besuchen", Calendar.getInstance()));
+                    //database.createToDo(new ToDo("Schrottplatz besuchen", Calendar.getInstance()));
+                    database.createToDo(new ToDo("Schrottplatz besuchen",Calendar.getInstance()));
                     // Liste aktualisieren
                     refreshListView();
                 }
@@ -75,10 +72,11 @@ public class Activity_TodoUebersicht extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     ToDoDatabase database = ToDoDatabase.getInstance(Activity_TodoUebersicht.this);
-                    if (datasource.size()>0){
+                    ToDo firstToDo = database.getFirstToDo();
+                    if (firstToDo != null){
                         Random r = new Random();
-                        datasource.get(0).setNme_Todo(String.valueOf(r.nextInt()));
-                        database.updateToDo(datasource.get(0));
+                        firstToDo.setNme_Todo(String.valueOf(r.nextInt()));
+                        database.updateToDo(firstToDo);
                         refreshListView();
                     }
 
@@ -102,8 +100,9 @@ public class Activity_TodoUebersicht extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     ToDoDatabase database = ToDoDatabase.getInstance(Activity_TodoUebersicht.this);
-                    if(datasource.size()>0){
-                        database.deleteToDo(datasource.get(0));
+                    ToDo firstToDo = database.getFirstToDo();
+                    if(firstToDo != null){
+                        database.deleteToDo(firstToDo);
                         refreshListView();
                     }
                 }
@@ -114,10 +113,9 @@ public class Activity_TodoUebersicht extends AppCompatActivity {
     }
 
     private void refreshListView(){
-        datasource.clear();
-        datasource.addAll(ToDoDatabase.getInstance(this).readAllToDo());
-        // für adapter immer ausführen, damit sich die Liste aktualisieren kann
-        adapter.notifyDataSetChanged();
+        adapter.changeCursor(ToDoDatabase.getInstance(this).getAllToDosAsCursor());
     }
+
+
 
 }
