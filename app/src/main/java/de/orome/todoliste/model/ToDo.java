@@ -1,12 +1,13 @@
 package de.orome.todoliste.model;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 /**
  * Created by Reinhard Herrmann on 31.01.18.
  */
 
-public class ToDo {
+public class ToDo implements Serializable {
 
     private long id;
     private String   nme_Todo;

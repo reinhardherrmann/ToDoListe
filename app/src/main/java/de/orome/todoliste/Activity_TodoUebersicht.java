@@ -1,5 +1,6 @@
 package de.orome.todoliste;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,6 +46,16 @@ public class Activity_TodoUebersicht extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Object element = adapterView.getAdapter().getItem(position);
+
+                if(element instanceof ToDo){
+                    ToDo todo = (ToDo) element;
+                    Intent intent = new Intent(Activity_TodoUebersicht.this,ToDoDetailActivity.class);
+                    intent.putExtra(ToDoDetailActivity.TODOKEY,todo);
+                    startActivity(intent);
+                }
+
+
+
                 Log.e("Clicked on: ", element.toString());
             }
         });
