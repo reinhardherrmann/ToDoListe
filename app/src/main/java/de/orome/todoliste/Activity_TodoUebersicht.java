@@ -24,20 +24,24 @@ public class Activity_TodoUebersicht extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_uebersicht);
 
-        listToDo=findViewById(R.id.list_ToDo);
+        listToDo=(ListView)findViewById(R.id.list_ToDo);
 
         // Datenquelle als String zum Befüllen der ListView anlegen
         List<ToDo> datasource = new ArrayList<>();
         datasource.add(new ToDo("Einkaufen"));
         datasource.add(new ToDo("Kerstin besuchen", Calendar.getInstance()));
+        datasource.add(new ToDo("Auto abholen", Calendar.getInstance()));
         // Adapter für Listview erzeugen und Werte übergeben
         listToDo.setAdapter(new ToDoOverviewListAdapter(this,datasource));
 
+        //  OnClickListener für Listview erstellen
         listToDo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Object element = adapterView.getAdapter().getItem(position);
-                //Log.e("Clicked on: ", element.toString());
+                Log.w("Clicked on: ", element.toString());
+                Log.w("Listenposition",String.valueOf(position));
+
             }
         });
     }
